@@ -7,6 +7,7 @@ from pygame.locals import *
 import sys
 import time
 import Shiritori
+import dicread
 import jtalk
 
 
@@ -37,7 +38,7 @@ class PicButton(QAbstractButton):
         self.update()
 
     def sizeHint(self):
-        return QSize(200, 200)
+        return QSize(320, 300)
 
 
 class WaitDialog(QDialog):
@@ -79,32 +80,41 @@ class MenuWidget(QWidget):
         hlayout.addWidget(label)
         hlayout.addStretch(1)
 
-        #self.button1 = PicButton('easy', QPixmap("a.png"), QPixmap("b.png"), QPixmap("c.png"))
-        self.button1 = QPushButton('easy')
-        self.button2 = QPushButton('normal')
-        self.button3 = QPushButton('hard')
-        self.button4 = QPushButton('reverse')
-        self.button1.setToolTip('かんたーん')
-        self.button2.setToolTip('ふつう')
-        self.button3.setToolTip('すごーいむずかしい')
-        self.button4.setToolTip('あたまとり')
+        self.button1 = PicButton('easy', QPixmap("images/EASY.png"), QPixmap("images/kantan.png"), QPixmap("かんたーん.png"))
+        self.button2 = PicButton('normal', QPixmap("images/NORMAL.png"), QPixmap("images/hutuu.png"), QPixmap("ふつう.png"))
+        self.button3 = PicButton('hard', QPixmap("images/HARD.png"), QPixmap("images/muzui.png"), QPixmap("むずかしい.png"))
+        self.button4 = PicButton('reverse', QPixmap("images/REVERSE.png"), QPixmap("atama.png"), QPixmap("images/あたまとり.png"))
+        self.button1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.button2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.button3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.button4.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        # self.button1 = QPushButton('easy')
+        # self.button2 = QPushButton('normal')
+        # self.button3 = QPushButton('hard')
+        # self.button4 = QPushButton('reverse')
+        # self.button1.setToolTip('かんたーん')
+        # self.button2.setToolTip('ふつう')
+        # self.button3.setToolTip('すごーいむずかしい')
+        # self.button4.setToolTip('あたまとり')
         # button1.setIcon(QIcon("easy.png"))
         # button2.setIcon(QIcon("normal.png"))
         # button3.setIcon(QIcon("hard.png"))
         # button4.setIcon(QIcon("reverse.png"))
 
         layout = QHBoxLayout()
+        layout.addSpacing(100)
         layout.addWidget(self.button1)
         layout.addWidget(self.button2)
         layout.addWidget(self.button3)
         layout.addWidget(self.button4)
+        layout.addSpacing(100)
 
         vlayout = QVBoxLayout()
         vlayout.addStretch(1)
         vlayout.addLayout(hlayout)
-        vlayout.addStretch(2)
+        vlayout.addStretch(1)
         vlayout.addLayout(layout)
-        vlayout.addStretch(2)
+        vlayout.addStretch(1)
 
         self.setLayout(vlayout)
 
@@ -119,6 +129,10 @@ class RecordWidget(QWidget):
     def initUI(self):
         font = QFont()
         font.setPointSize(40)
+        font2 = QFont()
+        font2.setPointSize(20)
+        font3 = QFont()
+        font3.setPointSize(15)
         self.player = QLineEdit()
         self.PC = QLineEdit()
         label1 = QLabel("あなた")
@@ -134,21 +148,76 @@ class RecordWidget(QWidget):
         lineLayout.addWidget(self.PC, 1, 1)
         lineLayout.setSpacing(50)
         self.word_text = QTextEdit()
+        self.word_text.setFont(font3)
         self.cursor = self.word_text.textCursor()
         self.record_button = QPushButton('record')
+        self.record_button.setFont(font2)
+        #self.record_button = PicButton('record', QPixmap('button_s.png'), QPixmap('button_s.png'), QPixmap('button_s.png'))
 
         recordLayout = QVBoxLayout()
-        recordLayout.addStretch(2)
+        #recordLayout.addStretch(2)
         recordLayout.addLayout(lineLayout)
-        recordLayout.addStretch(1)
+        recordLayout.addSpacing(50)
         recordLayout.addWidget(self.word_text)
+        #recordLayout.addStretch(1)
+        recordLayout.addSpacing(20)
         recordLayout.addWidget(self.record_button)
-        recordLayout.addStretch(2)
 
-        mainLayout = QHBoxLayout()
-        mainLayout.addStretch(1)
-        mainLayout.addLayout(recordLayout)
-        mainLayout.addStretch(1)
+        #recordLayout.addStretch(2)
+
+
+        speakerLayout = QVBoxLayout()
+        speaker_label = QLabel('現在の話者:')
+        speaker_label.setFont(font2)
+        self.speaker_button = QComboBox()
+        self.speaker_button.addItem("kubo")
+        self.speaker_button.addItem("oshiro")
+        self.speaker_button.addItem("nishida")
+        self.speaker_button.addItem("yamada")
+        self.speaker_button.addItem("zunko")
+        self.speaker_button.addItem("mei")
+        self.speaker_button.setFont(font2)
+        self.kubo = QPushButton('kubo')
+        self.kubo.setFont(font2)
+        self.oshiro = QPushButton('oshiro')
+        self.oshiro.setFont(font2)
+        self.nishida = QPushButton('nishida')
+        self.nishida.setFont(font2)
+        self.yamada = QPushButton('yamada')
+        self.yamada.setFont(font2)
+        self.zunko = QPushButton('zunko')
+        self.zunko.setFont(font2)
+        self.mei = QPushButton('mei')
+        self.mei.setFont(font2)
+        #speakerLayout.addStretch(1)
+        speakerLayout.addWidget(speaker_label)
+        speakerLayout.addWidget(self.speaker_button)
+        speakerLayout.addStretch(2)
+        speakerLayout.addWidget(self.kubo)
+        speakerLayout.addSpacing(10)
+        speakerLayout.addWidget(self.oshiro)
+        speakerLayout.addSpacing(10)
+        speakerLayout.addWidget(self.nishida)
+        speakerLayout.addSpacing(10)
+        speakerLayout.addWidget(self.yamada)
+        speakerLayout.addSpacing(10)
+        speakerLayout.addWidget(self.zunko)
+        speakerLayout.addSpacing(10)
+        speakerLayout.addWidget(self.mei)
+        #speakerLayout.addStretch(1)
+
+        mainLayout1 = QHBoxLayout()
+        mainLayout1.addStretch(3)
+        mainLayout1.addLayout(recordLayout)
+        mainLayout1.addStretch(2)
+        mainLayout1.addLayout(speakerLayout)
+        mainLayout1.addStretch(3)
+
+        mainLayout = QVBoxLayout()
+        mainLayout.addSpacing(100)
+        mainLayout.addLayout(mainLayout1)
+        mainLayout.addSpacing(100)
+
 
         # self.recording_msg = QMessageBox()
         # self.recording_msg.setWindowTitle('ちょっと待ってね')
@@ -165,6 +234,7 @@ class MainWindow(QWidget):
 
         self.initUI()
         self.play = Play(30)
+        self.speaker = None
         #self.word_list = []
 
     def initUI(self):
@@ -183,11 +253,19 @@ class MainWindow(QWidget):
     def record_handler(self):
         self.menu.close()
         sender = self.sender()
-        self.play.set_difficulty(sender.text())
+        self.difficulty = sender.text()
+        self.play.set_difficulty(self.difficulty)
         self.record = RecordWidget(self)
         self.vbox.addWidget(self.record)
         self.setLayout(self.vbox)
+        self.speaker = self.record.speaker_button.currentText()
         self.record.record_button.clicked.connect(self.play_handler)
+        self.record.kubo.clicked.connect(self.speak_handler)
+        self.record.oshiro.clicked.connect(self.speak_handler)
+        self.record.nishida.clicked.connect(self.speak_handler)
+        self.record.yamada.clicked.connect(self.speak_handler)
+        self.record.zunko.clicked.connect(self.speak_handler)
+        self.record.mei.clicked.connect(self.speak_handler)
 
     def play_handler(self):
         #self.record.recording_msg.exec_()
@@ -221,10 +299,21 @@ class MainWindow(QWidget):
                 self.record.cursor.insertText(self.play.playersentence + ' -> ')
                 self.record.PC.setText(self.play.pcword)
                 self.record.cursor.insertText(self.play.pcword + ' -> ')
+                dicread.speak(self.difficulty, self.play.pcword, self.speaker)
                 #self.word_list.append(self.play.pcword)
         else:
             self.play.is_pcturn = False
             QMessageBox.warning(self, '聞き取れなかった…', 'なにか話して!')
+
+
+    def speak_handler(self):
+        sender = self.sender()
+        speaker = sender.text()
+        if self.play.pcword == '':
+            QMessageBox.warning(self, '', '何か話してから押してね！')
+        else:
+            dicread.speak(self.difficulty, self.play.pcword, speaker)
+
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
