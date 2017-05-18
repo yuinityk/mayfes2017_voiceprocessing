@@ -16,7 +16,7 @@ def speak(d,word,speaker):
         dif = 'hard'
     else:
         dif = d
-        
+
     if os.path.exists('./recorded/'+dif+'/'+speaker+'/'+word+'.wav'):
         print('play wave file')
         wf = wave.open('./recorded/'+dif+'/'+speaker+'/'+word+'.wav','r')
@@ -27,7 +27,7 @@ def speak(d,word,speaker):
                 output=True)
         chunk = 1024
         data = wf.readframes(chunk)
-        while data != '':
+        while data != b'':
             stream.write(data)
             data = wf.readframes(chunk)
         stream.close()
