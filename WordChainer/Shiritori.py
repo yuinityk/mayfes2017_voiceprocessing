@@ -53,6 +53,7 @@ def record(FORMAT=pyaudio.paInt16, CHANNELS=1, RATE=48000, CHUNK=1024, RECORD_SE
             rate = RATE,
             input = True,
             input_device_index=idx,
+            #input_device_index = 6,
             frames_per_buffer = CHUNK)
     frames = []
     print("* recording...")
@@ -70,7 +71,7 @@ def record(FORMAT=pyaudio.paInt16, CHANNELS=1, RATE=48000, CHUNK=1024, RECORD_SE
     wf.setframerate(RATE)
     wf.writeframes(b''.join(frames))
     wf.close()
-	
+
     subprocess.call("sox output.wav -r 16000 put.wav",shell=True)#down sampling
     subprocess.call("sox put.wav output.wav gain -n",shell=True)
 
@@ -126,7 +127,7 @@ def to_katakana(h):
            'だ':'ダ', 'ぢ':'ヂ', 'づ':'ヅ', 'で':'デ', 'ど':'ド',
            'ば':'バ', 'び':'ビ', 'ぶ':'ブ', 'べ':'ベ', 'ぼ':'ボ',
            'ぱ':'パ', 'ぴ':'ピ', 'ぷ':'プ', 'ぺ':'ペ', 'ぽ':'ポ',
-           'うぇ':'ウェ', 
+           'うぇ':'ウェ',
            'きゃ':'キャ',        'きゅ':'キュ',        'きょ':'キョ',
            'ぎゃ':'ギャ',        'ぎゅ':'ギュ',        'ぎょ':'ギョ',
            'くぃ':'クィ',
@@ -159,7 +160,7 @@ def to_katakana(h):
            'ダ':'ダ', 'ヂ':'ヂ', 'ヅ':'ヅ', 'デ':'デ', 'ド':'ド',
            'バ':'バ', 'ビ':'ビ', 'ブ':'ブ', 'ベ':'ベ', 'ボ':'ボ',
            'パ':'パ', 'ピ':'ピ', 'プ':'プ', 'ペ':'ペ', 'ポ':'ポ',
-           'ウェ':'ウェ', 
+           'ウェ':'ウェ',
            'キャ':'キャ',        'キュ':'キュ',        'キョ':'キョ',
            'ギャ':'ギャ',        'ギュ':'ギュ',        'ギョ':'ギョ',
            'クィ':'クィ',
@@ -179,7 +180,7 @@ def to_katakana(h):
            }
     return dic[h]
 
-def get_endletter(w): 
+def get_endletter(w):
     """
     与えられた文字列の最後の文字を取得する.
     APIで返ってきた認識結果の末尾には、。が入っていることが多いのでsplitで取り除き,
@@ -244,7 +245,7 @@ def get_endletter(w):
 def return_word(el,wdic):
     return random.choice(wdic[el])
 
-def learn_word(words,savedic): 
+def learn_word(words,savedic):
     """
     wdicにない単語をsaveに入れて返す.
     wordsに含まれる一般名詞を保存する.
