@@ -32,7 +32,7 @@ class RecThread(threading.Thread):
         self.CHUNK = 2**9
         self.FORMAT = pyaudio.paInt16
         self.CHANNELS = 1
-        self.RATE = 48000
+        self.RATE = 44100
         self.p = pyaudio.PyAudio()
         self.idx = idx
         self.frames = []
@@ -49,7 +49,7 @@ class RecThread(threading.Thread):
                 input_device_index = self.idx,
                 frames_per_buffer = self.CHUNK)
         while not self.stop_event.is_set():
-            data = self.stream.read(self.CHUNK)
+            data = self.stream.read(self.CHUNK,exception_on_overflow=False)
             self.frames.append(data)
         
 
@@ -75,26 +75,29 @@ class RecThread(threading.Thread):
 
 if __name__ == '__main__':
     try:
-        count = 1
-        while 1:
-            th = RecThread(n=count)
-            th.start()
-            while input() != '':
-                pass
-            th.stop()
-            th.p.terminate()
-            del(th)
-            count += 1
+        th1 = RecThread(n=1,idx=0)
+	th2 = RecThread(n=2,idx=1)
+	th1.start()
+	th2.start()
+	time.sleep(5)
+	th1.stop()
+	th2.stop()
+	th1.p.terminate()
+	th2.p.terminate()
+	del(th1)
+	del(th2)
     except KeyboardInterrupt:
-        th.stop(f = 0)
-        th.p.terminate()
-        del(th)
+        th1.stop(f=0)
+	th2.stop(f=0)
+        th1.p.terminate()
+	th2.p.terminate()
+        del(th1)
+	del(th2)
         sys.exit()
 
 """
 if __name__ == '__main__':
     try:
-        while 1:
             th = TestThread(0.5)
             th.start()
             while raw_input() != '':
