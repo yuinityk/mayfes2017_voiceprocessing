@@ -256,7 +256,6 @@ class MainWindow(QWidget):
         self.record = RecordWidget(self)
         self.vbox.addWidget(self.record)
         self.setLayout(self.vbox)
-        self.speaker = self.record.speaker_button.currentText()
         self.record.record_button.clicked.connect(self.play_handler)
         self.record.kubo.clicked.connect(self.speak_handler)
         self.record.oshiro.clicked.connect(self.speak_handler)
@@ -274,6 +273,7 @@ class MainWindow(QWidget):
         self.play.playersentence = self.play.get_sentence()
         #self.record.recording_msg.close()
         recording.close()
+        self.speaker = self.record.speaker_button.currentText()
         if self.play.playersentence != "":
             self.record.player.setText(self.play.playersentence)
             #self.word_list.append(self.play.playersentence)
