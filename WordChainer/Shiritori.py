@@ -83,15 +83,19 @@ def get_sentence():
 def get_headntail(d):
     files = {"a": open(path, 'rb'), "v": "on"}
     r = requests.post(url, files=files)
-    print(r.json())
     if r.json()['results'][0]['tokens'][0]['spoken'] == '_on':
         return '_on','_on'
-    if d != 'reverse':
-        head = to_katakana(r.json()['results'][0]['tokens'][0]['spoken'][0])
-        tail = to_katakana(get_endletter(r.json()['results'][0]['tokens'][len(r.json()['results'][0]['tokens'])-2]['spoken']))
+    if len(r.json()['results'][0]['tokens'][0]['spoken']) > 1 and r.json()['results'][0]['tokens'][0]['spoken'][1] in yoon:
+        h = to_katakana(r.json()['results'][0]['tokens'][0]['spoken'][:2])
     else:
-        head = to_katakana(get_endletter(r.json()['results'][0]['tokens'][len(r.json()['results'][0]['tokens'])-2]['spoken']))
-        tail = to_katakana(r.json()['results'][0]['tokens'][0]['spoken'][0])
+        h = to_katakana(r.json()['results'][0]['tokens'][0]['spoken'][0])
+    t = to_katakana(get_endletter(r.json()['results'][0]['tokens'][len(r.json()['results'][0]['tokens'])-2]['spoken']))
+    if d != 'reverse':
+        head = h
+        tail = t
+    else:
+        head = t
+        tail = h
     return head,tail
 
 def load_dic(diff):
